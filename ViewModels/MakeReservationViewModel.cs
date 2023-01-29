@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Reservroom.Commands;
+using Reservroom.Models;
+using System;
 using System.Windows.Input;
 
 namespace Reservroom.ViewModels;
@@ -20,8 +17,8 @@ public class MakeReservationViewModel : ViewModelBase
             OnPropertyChanged(nameof(Username));
         }
     }
-    private int? _floorNumber;
-    public int? FloorNumber
+    private int _floorNumber;
+    public int FloorNumber
     {
         get => _floorNumber;
         set
@@ -31,8 +28,8 @@ public class MakeReservationViewModel : ViewModelBase
         }
     }
 
-    private int? _roomNumber;
-    public int? RoomNumber
+    private int _roomNumber;
+    public int RoomNumber
     {
         get => _roomNumber;
         set
@@ -42,8 +39,8 @@ public class MakeReservationViewModel : ViewModelBase
         }
     }
 
-    private DateTime? _startDate;
-    public DateTime? StartDate
+    private DateTime _startDate = new DateTime(2023, 1, 1);
+    public DateTime StartDate
     {
         get => _startDate;
         set
@@ -53,8 +50,8 @@ public class MakeReservationViewModel : ViewModelBase
         }
     }
 
-    private DateTime? _endDate;
-    public DateTime? EndDate
+    private DateTime _endDate = new DateTime(2023, 1, 8);
+    public DateTime EndDate
     {
         get => _endDate;
         set
@@ -67,8 +64,9 @@ public class MakeReservationViewModel : ViewModelBase
     public ICommand? SubmitCommand { get; }
     public ICommand? CancelCommand { get; }
 
-    public MakeReservationViewModel()
+    public MakeReservationViewModel(Hotel hotel)
     {
-
+        SubmitCommand = new MakeReservationCommand(this, hotel); // wir müssen mit this arbeiten, weil wir die Daten aus dem ViewModel brauchen
+        CancelCommand = new CancelMakeReservationCommand();
     }
 }

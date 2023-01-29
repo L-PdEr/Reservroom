@@ -10,7 +10,7 @@ public class MainViewModel : ViewModelBase
 {
     public ViewModelBase CurrentViewModel { get; }
 
-    public MainViewModel()
+    public MainViewModel(Models.Hotel _hotel)
     {
         CurrentViewModel = new ReservationListingViewModel();
     }

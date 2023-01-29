@@ -14,8 +14,8 @@ namespace Reservroom.Models
             FloorNumber = floorNumber;
         }
 
-        public int RoomNumber { get; }
-        public int FloorNumber { get; }
+        public int? RoomNumber { get; }
+        public int? FloorNumber { get; }
 
         public override string ToString()
         {

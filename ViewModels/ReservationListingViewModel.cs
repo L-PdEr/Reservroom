@@ -22,6 +22,8 @@ public class ReservationListingViewModel : ViewModelBase
     {
         _reservations = new ObservableCollection<ReservationViewModel>();
 
+        MakeReservationCommand = new NavigationCommand();
+
         // Hardcode reservations
         _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(1,2), "Max", DateTime.Now, DateTime.Now.AddHours(1))));
         _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(3, 2), "Max", DateTime.Now.AddHours(2), DateTime.Now.AddHours(3))));
