@@ -1,5 +1,6 @@
 ﻿using Reservroom.Commands;
 using Reservroom.Models;
+using Reservroom.Services;
 using Reservroom.Stores;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace Reservroom.ViewModels;
 
 public class ReservationListingViewModel : ViewModelBase
 {
+    private readonly Hotel _hotel;
+
     // Es kann nicht direkt zu Reservation gebunden werden da es kein INotifyPropertyChanged implementiert und es zu memory leaks kommen kann
     // Deshalb wird mit ReservationViewModel gebunden | Reservation -> ReservationViewModel -> ReservationListingViewModel
     private readonly ObservableCollection<ReservationViewModel> _reservations;
@@ -20,16 +23,23 @@ public class ReservationListingViewModel : ViewModelBase
     public IEnumerable<ReservationViewModel> Reservations => _reservations;
     public ICommand? MakeReservationCommand { get;}
     
-    public ReservationListingViewModel(NavigationStore navigationStore, Func<MakeReservationViewModel> createMakeReservationViewModel)
+    public ReservationListingViewModel(Hotel hotel, NavigationService makeReservationNavigationService)
     {
+        _hotel = hotel;
         _reservations = new ObservableCollection<ReservationViewModel>();
 
-        MakeReservationCommand = new NavigateCommand(navigationStore, createMakeReservationViewModel);
+        MakeReservationCommand = new NavigateCommand(makeReservationNavigationService);
 
-        // Hardcode reservations
-        _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(1,2), "Max", DateTime.Now, DateTime.Now.AddHours(1))));
-        _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(3, 2), "Max", DateTime.Now.AddHours(2), DateTime.Now.AddHours(3))));
-        _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(2, 4), "Max", DateTime.Now.AddHours(4), DateTime.Now.AddHours(5))));
-        _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(4, 2), "Max", DateTime.Now.AddHours(6), DateTime.Now.AddHours(7))));
+        UpdateReservations();
+    }
+
+    private void UpdateReservations()
+    {
+        _reservations.Clear();
+        foreach (var reservation in _hotel.GetAllReservations())
+        {
+            ReservationViewModel reservationViewModel = new ReservationViewModel(reservation);
+            _reservations.Add(reservationViewModel);
+        }
     }
 }

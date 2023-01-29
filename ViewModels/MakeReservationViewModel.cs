@@ -1,5 +1,6 @@
 ﻿using Reservroom.Commands;
 using Reservroom.Models;
+using Reservroom.Services;
 using Reservroom.Stores;
 using System;
 using System.Windows.Input;
@@ -52,6 +53,8 @@ public class MakeReservationViewModel : ViewModelBase
     }
 
     private DateTime _endDate = new DateTime(2023, 1, 8);
+
+
     public DateTime EndDate
     {
         get => _endDate;
@@ -65,9 +68,9 @@ public class MakeReservationViewModel : ViewModelBase
     public ICommand? SubmitCommand { get; }
     public ICommand? CancelCommand { get; }
 
-    public MakeReservationViewModel(Hotel hotel, NavigationStore navigationStore, Func<ReservationListingViewModel> createReservationListingViewModel)
+    public MakeReservationViewModel(Hotel hotel, NavigationService reservationViewNavigationService)
     {
-        SubmitCommand = new MakeReservationCommand(this, hotel); // wir müssen mit this arbeiten, weil wir die Daten aus dem ViewModel brauchen
-        CancelCommand = new NavigateCommand(navigationStore, createReservationListingViewModel);
+        SubmitCommand = new MakeReservationCommand(this, hotel, reservationViewNavigationService); // wir müssen mit this arbeiten, weil wir die Daten aus dem ViewModel brauchen
+        CancelCommand = new NavigateCommand(reservationViewNavigationService);
     }
 }

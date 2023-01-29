@@ -1,4 +1,5 @@
-﻿using Reservroom.Stores;
+﻿using Reservroom.Services;
+using Reservroom.Stores;
 using Reservroom.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,18 +11,16 @@ namespace Reservroom.Commands;
 
 public class NavigateCommand : CommandBase
 {
-    private readonly NavigationStore _navigationStore;
+    private readonly NavigationService _navigationService;
     private readonly Func<ViewModelBase> _createViewModel;
 
-    public NavigateCommand(NavigationStore navigationStore, Func<ViewModelBase> createViewModel)
+    public NavigateCommand(NavigationService navigationService)
     {
-        _navigationStore = navigationStore;
-        _createViewModel = createViewModel;
+        _navigationService = navigationService;
     }
-
 
     public override void Execute(object parameter)
     {
-        _navigationStore.CurrentViewModel = _createViewModel();
+        _navigationService.Navigate();
     }
 }
