@@ -1,4 +1,6 @@
-﻿using Reservroom.Models;
+﻿using Reservroom.Commands;
+using Reservroom.Models;
+using Reservroom.Stores;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,11 +20,11 @@ public class ReservationListingViewModel : ViewModelBase
     public IEnumerable<ReservationViewModel> Reservations => _reservations;
     public ICommand? MakeReservationCommand { get;}
     
-    public ReservationListingViewModel()
+    public ReservationListingViewModel(NavigationStore navigationStore)
     {
         _reservations = new ObservableCollection<ReservationViewModel>();
 
-        MakeReservationCommand = new NavigationCommand();
+        MakeReservationCommand = new NavigateCommand(navigationStore);
 
         // Hardcode reservations
         _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(1,2), "Max", DateTime.Now, DateTime.Now.AddHours(1))));
