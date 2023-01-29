@@ -28,12 +28,9 @@ namespace Reservroom.Commands
 
         public override bool CanExecute(object parameter)
         {
-            // Raised canexecute changed event when the username changes
-            // dafür müssen wir ein event abonieren
-            return 
-                !string.IsNullOrEmpty(_makeReservationViewModel.Username) 
-                && _makeReservationViewModel.FloorNumber > 0
-                && base.CanExecute(parameter);
+            return !string.IsNullOrEmpty(_makeReservationViewModel.Username) &&
+                _makeReservationViewModel.FloorNumber > 0 &&
+                base.CanExecute(parameter);
         }
         public override void Execute(object parameter)
         {
@@ -42,7 +39,6 @@ namespace Reservroom.Commands
                 _makeReservationViewModel.Username,
                 _makeReservationViewModel.StartDate,
                 _makeReservationViewModel.EndDate);
-            _hotel.MakeReservation(reservation);
 
             try
             {
@@ -54,13 +50,12 @@ namespace Reservroom.Commands
                 MessageBox.Show($"This room is already taken.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            // || statt && weil hier meldet sich was sich ändern und zwei werte gleichzeitig zu ändern ist unmöglich
             if(e.PropertyName == nameof(MakeReservationViewModel.Username) ||
                 e.PropertyName == nameof(MakeReservationViewModel.FloorNumber))
             {
-                OnCanExecuteChanged();
+                OnCanExecutedChanged();
             }
         }
     }

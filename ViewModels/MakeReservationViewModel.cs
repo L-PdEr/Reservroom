@@ -1,5 +1,6 @@
 ﻿using Reservroom.Commands;
 using Reservroom.Models;
+using Reservroom.Stores;
 using System;
 using System.Windows.Input;
 
@@ -64,9 +65,9 @@ public class MakeReservationViewModel : ViewModelBase
     public ICommand? SubmitCommand { get; }
     public ICommand? CancelCommand { get; }
 
-    public MakeReservationViewModel(Hotel hotel)
+    public MakeReservationViewModel(Hotel hotel, NavigationStore navigationStore, Func<ReservationListingViewModel> createReservationListingViewModel)
     {
         SubmitCommand = new MakeReservationCommand(this, hotel); // wir müssen mit this arbeiten, weil wir die Daten aus dem ViewModel brauchen
-        //CancelCommand = new CancelMakeReservationCommand();
+        CancelCommand = new NavigateCommand(navigationStore, createReservationListingViewModel);
     }
 }
