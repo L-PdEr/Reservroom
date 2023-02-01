@@ -21,14 +21,5 @@ namespace Reservroom.Models
         public DateTime StartTime { get; }
         public DateTime EndTime { get; }
         public TimeSpan Length => EndTime.Subtract(StartTime);
-
-        public bool Conflics(Reservation reservation)
-        {
-            if (reservation.RoomID != RoomID)
-            {
-                return false;
-            }
-            return reservation.StartTime < EndTime && StartTime < reservation.EndTime;
-        }
     }
 }
