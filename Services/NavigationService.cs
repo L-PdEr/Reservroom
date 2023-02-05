@@ -5,13 +5,13 @@ using System;
 
 namespace Reservroom.Services;
 
-public class NavigationService
+public class NavigationService<TViewModel> where TViewModel : ViewModelBase // wurde generic gemacht weil die view models durch dependency injection sonst nicht erstellt werden können
 {
     private readonly NavigationStore _navigationStore;
-    private readonly Func<ViewModelBase> _createViewModel;
+    private readonly Func<TViewModel> _createViewModel;
     
     // Func ist ein View delegate
-    public NavigationService(NavigationStore navigationStore, Func<ViewModelBase> createViewModel)
+    public NavigationService(NavigationStore navigationStore, Func<TViewModel> createViewModel)
     {
         _navigationStore = navigationStore;
         _createViewModel = createViewModel;

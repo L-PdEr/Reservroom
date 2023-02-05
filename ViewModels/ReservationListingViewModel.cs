@@ -14,8 +14,8 @@ namespace Reservroom.ViewModels;
 
 public class ReservationListingViewModel : ViewModelBase
 {
-    private readonly Hotel _hotel;
 
+    
     // Es kann nicht direkt zu Reservation gebunden werden da es kein INotifyPropertyChanged implementiert und es zu memory leaks kommen kann
     // Deshalb wird mit ReservationViewModel gebunden | Reservation -> ReservationViewModel -> ReservationListingViewModel
     private readonly ObservableCollection<ReservationViewModel> _reservations;
@@ -52,13 +52,13 @@ public class ReservationListingViewModel : ViewModelBase
     public ICommand LoadReservationsCommand { get; }
     public ICommand MakeReservationCommand { get; }
     
-    public ReservationListingViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService)
+    public ReservationListingViewModel(HotelStore hotelStore, NavigationService<MakeReservationViewModel> makeReservationNavigationService)
     {
         _hotelStore = hotelStore;
         _reservations = new ObservableCollection<ReservationViewModel>();
 
         LoadReservationsCommand = new LoadReservationsCommand(this, hotelStore);
-        MakeReservationCommand = new NavigateCommand(makeReservationNavigationService);
+        MakeReservationCommand = new NavigateCommand<MakeReservationViewModel>(makeReservationNavigationService);
 
         _hotelStore.ReservationMade += OnReservationMade; // Jedes mal wenn man etwas subscribte sollte man auf memory leaks aufpassen
                                                          // hier in diesem fall erhält der subscriber das viewmodel am leben und es kommt
@@ -82,7 +82,7 @@ public class ReservationListingViewModel : ViewModelBase
         _reservations.Add(reservationViewModel);
     }
 
-    public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService)
+    public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService<MakeReservationViewModel> makeReservationNavigationService)
     {
         ReservationListingViewModel viewModel = new ReservationListingViewModel(hotelStore, makeReservationNavigationService);
         viewModel.LoadReservationsCommand.Execute(null);

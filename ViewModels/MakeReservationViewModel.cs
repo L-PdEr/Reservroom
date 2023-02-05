@@ -123,11 +123,11 @@ public class MakeReservationViewModel : ViewModelBase, INotifyDataErrorInfo
 
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
-    public MakeReservationViewModel(HotelStore hotelStore, NavigationService reservationViewNavigationService)
+    public MakeReservationViewModel(HotelStore hotelStore, NavigationService<ReservationListingViewModel> reservationViewNavigationService)
     {
         _propertyNameToErrorsDictionary = new Dictionary<string, List<string>>();
         SubmitCommand = new MakeReservationCommand(this, hotelStore, reservationViewNavigationService); // wir müssen mit this arbeiten, weil wir die Daten aus dem ViewModel brauchen
-        CancelCommand = new NavigateCommand(reservationViewNavigationService);
+        CancelCommand = new NavigateCommand<ReservationListingViewModel>(reservationViewNavigationService);
     }
 
     public IEnumerable GetErrors(string? propertyName)
