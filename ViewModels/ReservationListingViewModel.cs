@@ -19,23 +19,47 @@ public class ReservationListingViewModel : ViewModelBase
     // Es kann nicht direkt zu Reservation gebunden werden da es kein INotifyPropertyChanged implementiert und es zu memory leaks kommen kann
     // Deshalb wird mit ReservationViewModel gebunden | Reservation -> ReservationViewModel -> ReservationListingViewModel
     private readonly ObservableCollection<ReservationViewModel> _reservations;
+    private HotelStore _hotelStore;
+
     // IEnumarable für capsolation 
     public IEnumerable<ReservationViewModel> Reservations => _reservations;
 
     public ICommand LoadReservationsCommand { get; }
     public ICommand MakeReservationCommand { get; }
     
-    public ReservationListingViewModel(Hotel hotel, NavigationService makeReservationNavigationService)
+    public ReservationListingViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService)
     {
+        _hotelStore = hotelStore;
         _reservations = new ObservableCollection<ReservationViewModel>();
 
-        LoadReservationsCommand = new LoadReservationsCommand(this, hotel);
+        LoadReservationsCommand = new LoadReservationsCommand(this, hotelStore);
         MakeReservationCommand = new NavigateCommand(makeReservationNavigationService);
+
+        _hotelStore.ReservationMade += OnReservationMade; // Jedes mal wenn man etwas subscribte sollte man auf memory leaks aufpassen
+                                                         // hier in diesem fall erhält der subscriber das viewmodel am leben und es kommt
+                                                         // nicht zu einem garbage collection                                                  
     }
-    
-    public static ReservationListingViewModel LoadViewModel(Hotel hotel, NavigationService makeReservationNavigationService)
+
+    ~ReservationListingViewModel() // destructor wird aufgerufen wenn das viewmodel nicht mehr gebraucht wird
+    {                              // zu reinen testzwecken ob der destructor aufgerufen wird kann man ihn setzen und mit breakpoint rein debuggen
+    }
+
+    public override void Dispose()
     {
-        ReservationListingViewModel viewModel = new ReservationListingViewModel(hotel, makeReservationNavigationService);
+        // Unsubscribe from events
+        _hotelStore.ReservationMade -= OnReservationMade;
+        base.Dispose();
+    }
+
+    private void OnReservationMade(Reservation reservation)
+    {
+        ReservationViewModel reservationViewModel = new ReservationViewModel(reservation); // wrap reservation in ReservationViewModel
+        _reservations.Add(reservationViewModel);
+    }
+
+    public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService)
+    {
+        ReservationListingViewModel viewModel = new ReservationListingViewModel(hotelStore, makeReservationNavigationService);
         viewModel.LoadReservationsCommand.Execute(null);
         return viewModel;
     }

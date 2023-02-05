@@ -68,9 +68,9 @@ public class MakeReservationViewModel : ViewModelBase
     public ICommand? SubmitCommand { get; }
     public ICommand? CancelCommand { get; }
 
-    public MakeReservationViewModel(Hotel hotel, NavigationService reservationViewNavigationService)
+    public MakeReservationViewModel(HotelStore hotelStore, NavigationService reservationViewNavigationService)
     {
-        SubmitCommand = new MakeReservationCommand(this, hotel, reservationViewNavigationService); // wir müssen mit this arbeiten, weil wir die Daten aus dem ViewModel brauchen
+        SubmitCommand = new MakeReservationCommand(this, hotelStore, reservationViewNavigationService); // wir müssen mit this arbeiten, weil wir die Daten aus dem ViewModel brauchen
         CancelCommand = new NavigateCommand(reservationViewNavigationService);
     }
 }
