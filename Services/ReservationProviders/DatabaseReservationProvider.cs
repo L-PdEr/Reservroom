@@ -30,6 +30,8 @@ public class DatabaseReservationProvider : IReservationProvider
         {
             IEnumerable<ReservationDTO> reservationDTOs = await context.Reservations.ToListAsync();
 
+            await Task.Delay(2000);
+
             return reservationDTOs.Select(r => ToReservation(r));
         }
     }

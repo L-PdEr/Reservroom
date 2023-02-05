@@ -15,7 +15,7 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Make Reservation" Grid.Row="0" Margin="10,10,10,10" FontWeight="Bold" Style="{StaticResource Header}"/>
+        <TextBlock Text="Make Reservation" Grid.Row="0" Margin="10,10,10,10" Style="{StaticResource MaterialDesignHeadline4TextBlock}"/>
 
         <Grid Grid.Row="1" Margin="0 25 0 0">
             <Grid.RowDefinitions>

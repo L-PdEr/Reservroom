@@ -24,6 +24,31 @@ public class ReservationListingViewModel : ViewModelBase
     // IEnumarable für capsolation 
     public IEnumerable<ReservationViewModel> Reservations => _reservations;
 
+    private string _errorMessage; // kann auch eine liste von strings sein falls mehrere fehlermeldungen angezeigt werden sollen
+    public string ErrorMessage
+    {
+        get { return _errorMessage; }
+        set
+        {
+            _errorMessage = value;
+            OnPropertyChanged(nameof(ErrorMessage));
+            OnPropertyChanged(nameof(HasErrorMessage)); // wenn ui updatet kann es den wert wieder holen
+        }
+    }
+    public bool HasErrorMessage => !string.IsNullOrEmpty(ErrorMessage); // Hat eine abhängigkeit von ErrorMessage
+
+    private bool _isLoading;
+
+    public bool IsLoading
+    {
+        get { return _isLoading; }
+        set 
+        { 
+            _isLoading = value;
+            OnPropertyChanged(nameof(IsLoading));
+        }
+    }
+
     public ICommand LoadReservationsCommand { get; }
     public ICommand MakeReservationCommand { get; }
     
@@ -40,9 +65,9 @@ public class ReservationListingViewModel : ViewModelBase
                                                          // nicht zu einem garbage collection                                                  
     }
 
-    ~ReservationListingViewModel() // destructor wird aufgerufen wenn das viewmodel nicht mehr gebraucht wird
-    {                              // zu reinen testzwecken ob der destructor aufgerufen wird kann man ihn setzen und mit breakpoint rein debuggen
-    }
+    //~ReservationListingViewModel() // destructor wird aufgerufen wenn das viewmodel nicht mehr gebraucht wird
+    //{                              // zu reinen testzwecken ob der destructor aufgerufen wird kann man ihn setzen und mit breakpoint rein debuggen
+    //}
 
     public override void Dispose()
     {
